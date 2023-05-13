@@ -1,20 +1,19 @@
 import {
-  BadRequestException,
   ConflictException,
-  HttpException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Schema } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { User, UserDocument } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
   async create(createUserDto: CreateUserDto) {
     const newUser = new this.userModel(createUserDto);
@@ -41,8 +40,13 @@ export class UsersService {
   }
 
   async findOne(email: string) {
-    const user = await this.userModel.findOne({ email: email });
+    const user: User = await this.userModel.findOne({ email: email });
     if (!user) throw new NotFoundException(`${email} not found`);
+    return user;
+  }
+  async findOneById(id: string) {
+    const user = await this.userModel.findById({ _id: id });
+    if (!user) throw new NotFoundException(`user not found`);
     return user;
   }
 

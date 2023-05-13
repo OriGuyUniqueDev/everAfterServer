@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { EventsModule } from './events/events.module';
+import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv';
 import 'dotenv/config.js';
 dotenv.config();
@@ -15,6 +16,7 @@ dotenv.config();
     ),
     UsersModule,
     EventsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

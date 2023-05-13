@@ -1,6 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
 import * as Joi from 'joi';
-import { User } from '../entities/user.entity';
 
 export class CreateUserDto {
   readonly fullName: string;
