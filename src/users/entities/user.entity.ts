@@ -2,22 +2,24 @@ import { Event } from 'src/events/entities/event.entity';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as Joi from 'joi';
 import * as bcrypt from 'bcrypt';
-import mongoose from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { type } from 'os';
 
-export interface UserDocument extends mongoose.Document {
-  _id: string;
-  fullName: string;
-  brideName: string;
-  groomName: string;
-  typeOfUser: 'admin' | 'private' | 'business';
-  eventData: Event;
-  email: string;
-  password: string;
-}
+// export interface UserDocument extends mongoose.Document {
+//   _id: string;
+//   fullName: string;
+//   brideName: string;
+//   groomName: string;
+//   typeOfUser: 'admin' | 'private' | 'business';
+//   eventData: Event;
+//   email: string;
+//   password: string;
+// }
+export type UserDocument = HydratedDocument<User>;
 @Schema()
 export class User {
-  @Prop({ required: false })
-  _id: string;
+  // @Prop({ required: false })
+  // _id: string;
   @Prop({ required: true })
   fullName: string;
   @Prop({ required: true })

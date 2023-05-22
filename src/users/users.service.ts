@@ -8,15 +8,20 @@ import { Model, Schema } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
-import * as bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
+const bcrypt = require('bcrypt');
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-  ) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+
   async create(createUserDto: CreateUserDto) {
     const newUser = new this.userModel(createUserDto);
+    const saltRounds = 10;
+    const password = createUserDto.password;
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+      newUser.password = hash;
+    });
     // check the user input
     CreateUserDto.validate(createUserDto);
     //check if the user exist in the database
@@ -26,9 +31,11 @@ export class UsersService {
     if (existingUser) throw new ConflictException('User already exist');
     // add new user
     try {
-      const createdUser = await newUser.save();
-      return createdUser;
+      const userToCreate = await newUser.save();
+      return userToCreate;
     } catch (error) {
+      console.log(error);
+
       throw new NotFoundException('User not created');
     }
   }

@@ -7,6 +7,8 @@ import { EventsModule } from './events/events.module';
 import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv';
 import 'dotenv/config.js';
+import { UsersService } from './users/users.service';
+import { AuthService } from './auth/auth.service';
 dotenv.config();
 
 @Module({

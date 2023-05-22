@@ -2,20 +2,21 @@ import { BadRequestException } from '@nestjs/common';
 import * as Joi from 'joi';
 
 export class CreateUserDto {
-  readonly fullName: string;
-  readonly brideName: string;
-  readonly groomName: string;
-  readonly typeOfUser: 'admin' | 'private' | 'business';
-  readonly eventData: Event[];
-  readonly email: string;
-  readonly password: string;
-  static readonly schema = Joi.object({
+  fullName: string;
+  brideName: string;
+  groomName: string;
+  typeOfUser: 'admin' | 'private' | 'business';
+  eventData: Event[];
+  email: string;
+  password: string;
+  static schema = Joi.object({
     fullName: Joi.string().required(),
     brideName: Joi.string().required(),
     groomName: Joi.string().required(),
     typeOfUser: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
+    eventData: Joi.array(),
   });
   static validate(data: CreateUserDto) {
     // validate the user data
