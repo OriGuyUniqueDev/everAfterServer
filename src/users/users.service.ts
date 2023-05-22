@@ -16,12 +16,6 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async create(createUserDto: CreateUserDto) {
-    const newUser = new this.userModel(createUserDto);
-    const saltRounds = 10;
-    const password = createUserDto.password;
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-      newUser.password = hash;
-    });
     // check the user input
     CreateUserDto.validate(createUserDto);
     //check if the user exist in the database
@@ -29,12 +23,19 @@ export class UsersService {
       .findOne({ email: createUserDto.email })
       .exec();
     if (existingUser) throw new ConflictException('User already exist');
+
+    // creating the model + hasing the password
+    const newUser = new this.userModel(createUserDto);
+    const saltRounds = 10;
+    await bcrypt.hash(newUser.password, saltRounds).then(function (hash) {
+      newUser.password = hash;
+    });
     // add new user
     try {
       const userToCreate = await newUser.save();
       return userToCreate;
     } catch (error) {
-      console.log(error);
+      error;
 
       throw new NotFoundException('User not created');
     }

@@ -6,16 +6,23 @@ import { UsersModule } from './users/users.module';
 import { EventsModule } from './events/events.module';
 import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import 'dotenv/config.js';
 import { UsersService } from './users/users.service';
 import { AuthService } from './auth/auth.service';
+import { DevDatabaseModule } from './databases/dev-database.module';
+import { ProdDatabaseModule } from './databases/prod-database.module';
 dotenv.config();
+process.env.NODE_ENV;
 
 @Module({
   imports: [
     MongooseModule.forRoot(
-      `mongodb+srv://${process.env.DBAUTH}@${process.env.DBPATH}`,
+      process.env.NODE_ENV === 'production'
+        ? `mongodb+srv://${process.env.DBAUTH}@${process.env.DBPATH}`
+        : process.env.TESTDBURL,
     ),
+
     UsersModule,
     EventsModule,
     AuthModule,
