@@ -27,7 +27,8 @@ export class EventsService {
 
   async findAll() {
     const allEvent = await this.eventModel.find();
-    if (!allEvent) throw new NotFoundException('No Events found');
+    if (!allEvent || allEvent.length <= 0)
+      throw new NotFoundException('No Events found');
     return allEvent;
   }
 
