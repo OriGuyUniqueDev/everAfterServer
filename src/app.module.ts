@@ -15,7 +15,7 @@ import { ProdDatabaseModule } from './databases/prod-database.module';
 import { APP_GUARD } from '@nestjs/core';
 dotenv.config();
 process.env.NODE_ENV;
-//demo
+
 @Module({
   imports: [
     MongooseModule.forRoot(
