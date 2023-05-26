@@ -12,7 +12,6 @@ import { UsersService } from './users/users.service';
 import { AuthService } from './auth/auth.service';
 import { DevDatabaseModule } from './databases/dev-database.module';
 import { ProdDatabaseModule } from './databases/prod-database.module';
-import { RolesGuard } from './auth/roles-guard';
 import { APP_GUARD } from '@nestjs/core';
 dotenv.config();
 process.env.NODE_ENV;
@@ -30,6 +29,6 @@ process.env.NODE_ENV;
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, { provide: APP_GUARD, useClass: RolesGuard }],
+  // providers: [AppService, { provide: APP_GUARD, useClass: RolesGuard }],
 })
 export class AppModule {}

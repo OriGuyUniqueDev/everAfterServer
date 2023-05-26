@@ -12,8 +12,8 @@ import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Roles } from 'src/users/entities/roles.decorator';
-import { Role } from 'src/users/entities/role.enum';
+// import { Roles } from 'src/users/entities/roles.decorator';
+// import { Role } from 'src/users/entities/role.enum';
 
 @Controller('events')
 export class EventsController {
@@ -21,7 +21,7 @@ export class EventsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  @Roles(Role.ADMIN)
+  // @Roles(Role.ADMIN)
   create(@Body() createEventDto: CreateEventDto) {
     return this.eventsService.create(createEventDto);
   }
