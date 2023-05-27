@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { EventsModule } from './events/events.module';
@@ -13,9 +12,11 @@ import { AuthService } from './auth/auth.service';
 import { DevDatabaseModule } from './databases/dev-database.module';
 import { ProdDatabaseModule } from './databases/prod-database.module';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './authertion/roles.guard';
+import {} from './authorization/roles.guard';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { LocalStrategy } from './auth/local.strategy';
+import { LocalAuthGuard } from './auth/local-auth.guard';
 dotenv.config();
-process.env.NODE_ENV;
 
 @Module({
   imports: [
@@ -30,6 +31,6 @@ process.env.NODE_ENV;
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, { provide: APP_GUARD, useClass: RolesGuard }],
+  // providers: [LocalAuthGuard],
 })
 export class AppModule {}
