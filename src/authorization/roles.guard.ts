@@ -11,12 +11,10 @@ export class RolesGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    // console.log(context.switchToHttp().getRequest().user.typeOfUser);
-    // console.log(requiredRoles[0]);
+
     let hasRequiredRoles: boolean = false;
     requiredRoles.forEach((role) => {
       if (context.switchToHttp().getRequest().user.typeOfUser === role) {
-        console.log('true');
         hasRequiredRoles = true;
         return true;
       } else {
@@ -24,8 +22,5 @@ export class RolesGuard implements CanActivate {
       }
     });
     return hasRequiredRoles;
-
-    // console.log(requiredRoles);
-    // return false;
   }
 }
