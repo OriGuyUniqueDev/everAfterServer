@@ -24,9 +24,8 @@ export class UsersController {
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
-  @Roles(Role.Private)
+  @Roles(Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  // @UseGuards()
   @Get()
   findAll() {
     return this.usersService.findAll();
@@ -38,11 +37,13 @@ export class UsersController {
     return this.usersService.findOne(email);
   }
   @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
   @Patch(':email')
   update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(email, updateUserDto);
   }
   @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
   @Delete(':email')
   remove(@Param('email') email: string) {
     return this.usersService.remove(email);
