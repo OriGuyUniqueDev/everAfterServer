@@ -8,7 +8,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   readonly brideName: string;
   readonly groomName: string;
   readonly typeOfUser: 'admin' | 'private' | 'business';
-  readonly eventData: Event[];
+  readonly eventData: string;
   readonly email: string;
   readonly password: string;
   static readonly schema = Joi.object({

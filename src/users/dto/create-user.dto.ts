@@ -6,7 +6,7 @@ export class CreateUserDto {
   brideName: string;
   groomName: string;
   typeOfUser: 'admin' | 'private' | 'business';
-  eventData: Event[];
+  eventData: string;
   email: string;
   password: string;
   static schema = Joi.object({
