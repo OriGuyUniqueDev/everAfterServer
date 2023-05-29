@@ -30,7 +30,7 @@ export class UsersController {
   findAll() {
     return this.usersService.findAll();
   }
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard,RolesGuard)
   @Roles(Role.Admin)
   @Get(':email')
   findOne(@Param('email') email: string) {
