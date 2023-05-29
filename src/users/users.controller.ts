@@ -12,9 +12,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Roles } from 'src/authorization/roles.decorator';
-import { Role } from 'src/authorization/role.enum';
-import { RolesGuard } from 'src/authorization/roles.guard';
+import { Roles } from 'src/authorization/roleAuth/roles.decorator';
+import { Role } from 'src/authorization/roleAuth/role.enum';
+import { RolesGuard } from 'src/authorization/roleAuth/roles.guard';
 
 @Controller('users')
 export class UsersController {
