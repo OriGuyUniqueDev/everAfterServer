@@ -22,9 +22,9 @@ export class User {
   // _id: string;
   @Prop({ required: true })
   fullName: string;
-  @Prop({ required: true })
+  @Prop({ required: false })
   brideName: string;
-  @Prop({ required: true })
+  @Prop({ required: false })
   groomName: string;
   @Prop({ required: true })
   typeOfUser: 'admin' | 'private' | 'business';
@@ -36,8 +36,8 @@ export class User {
   password: string;
   static readonly schema = Joi.object({
     fullName: Joi.string().required(),
-    brideName: Joi.string().required(),
-    groomName: Joi.string().required(),
+    brideName: Joi.string().optional(),
+    groomName: Joi.string(),
     typeOfUser: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),

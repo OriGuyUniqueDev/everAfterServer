@@ -11,8 +11,8 @@ export class CreateUserDto {
   password: string;
   static schema = Joi.object({
     fullName: Joi.string().required(),
-    brideName: Joi.string().required(),
-    groomName: Joi.string().required(),
+    brideName: Joi.string(),
+    groomName: Joi.string(),
     typeOfUser: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),

@@ -12,7 +12,6 @@ import { AuthService } from './auth/auth.service';
 import { DevDatabaseModule } from './databases/dev-database.module';
 import { ProdDatabaseModule } from './databases/prod-database.module';
 import { APP_GUARD } from '@nestjs/core';
-import {} from './authorization/roles.guard';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { LocalStrategy } from './auth/local.strategy';
 import { LocalAuthGuard } from './auth/local-auth.guard';
