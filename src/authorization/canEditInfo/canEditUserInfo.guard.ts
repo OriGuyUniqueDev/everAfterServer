@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs";
+import { User } from "src/users/entities/user.entity";
 
 export class CanEditUserInfoGuard implements CanActivate {
     constructor(private reflector:Reflector){}
@@ -12,12 +13,15 @@ export class CanEditUserInfoGuard implements CanActivate {
                 //edit his own details
                 if (user.email === paramEmail) {
                     return true
-                }else{
-                    return false
                 }
                 //can edit user info
-                
-                return true        
+                user.connectedUsers.forEach((email:string) => {
+                    if(email === paramEmail){
+                        return true
+                    }else{
+                        return false
+                    }
+                });
             case 'private':
                 if (user.email === paramEmail) {
                     return true
