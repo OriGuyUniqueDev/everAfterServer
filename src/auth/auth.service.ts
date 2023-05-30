@@ -29,6 +29,7 @@ export class AuthService {
       email: user.email,
       id: user._id,
       typeOfUser: user.typeOfUser,
+      connectedUsers: user.connectedUsers
     };
 
     return {

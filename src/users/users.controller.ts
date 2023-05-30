@@ -25,8 +25,8 @@ export class UsersController {
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
-  @Roles(Role.Admin)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin,Role.Business)
+  @UseGuards(JwtAuthGuard,CanEditUserInfoGuard,RolesGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();
@@ -37,8 +37,8 @@ export class UsersController {
   findOne(@Param('email') email: string) {
     return this.usersService.findOne(email);
   }
-  @UseGuards(JwtAuthGuard)
-  @Roles(Role.Admin)
+  @Roles(Role.Admin,Role.Business,Role.Private)
+  @UseGuards(JwtAuthGuard,CanEditUserInfoGuard,RolesGuard)
   @Patch(':email')
   update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(email, updateUserDto);

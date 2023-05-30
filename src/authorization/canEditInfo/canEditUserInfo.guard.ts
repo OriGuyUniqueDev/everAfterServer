@@ -18,15 +18,24 @@ export class CanEditUserInfoGuard implements CanActivate {
                     return true
                 }
                 //can edit user info
-                user.connectedUsers.forEach((email:string) => {
-                    if(email === paramEmail){
+                console.log(user);
+                for (let i = 0; i < user.connectedUsers.length; i++) {
+                    if(user.connectedUsers[i] === paramEmail){
                         console.log('CanEditUserInfoGuard guard - continue');
 
                         return true
-                    }else{
-                        return false
                     }
-                });
+                }
+                return false
+                // user.connectedUsers.forEach((email:string) => {
+                //     if(email === paramEmail){
+                //         console.log('CanEditUserInfoGuard guard - continue');
+
+                //         return true
+                //     }else{
+                //         return false
+                //     }
+                // });
             case 'private':
                 if (user.email === paramEmail) {
                         console.log('CanEditUserInfoGuard guard - continue');
