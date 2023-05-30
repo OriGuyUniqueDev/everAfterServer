@@ -1,7 +1,6 @@
 import { CanActivate, ExecutionContext } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Observable } from "rxjs";
-import { User } from "src/users/entities/user.entity";
+
 
 export class CanEditUserInfoGuard implements CanActivate {
     constructor(private reflector:Reflector){}
