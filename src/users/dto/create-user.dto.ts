@@ -7,12 +7,14 @@ export class CreateUserDto {
   groomName: string;
   typeOfUser: 'admin' | 'private' | 'business';
   eventData: string;
+  connectedUsers:string[]
   email: string;
   password: string;
   static schema = Joi.object({
     fullName: Joi.string().required(),
     brideName: Joi.string(),
     groomName: Joi.string(),
+    connectedUsers:Joi.array(),
     typeOfUser: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),

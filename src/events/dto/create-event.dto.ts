@@ -1,5 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import * as Joi from 'joi';
+
+
 export class CreateEventDto {
   readonly numOfGuest: number;
   readonly eventUser: string;

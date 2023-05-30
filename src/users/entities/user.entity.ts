@@ -32,12 +32,15 @@ export class User {
   eventData: Event;
   @Prop({ required: true })
   email: string;
+  @Prop({ required: false })
+  connectedUsers: string[];
   @Prop({ required: true })
   password: string;
   static readonly schema = Joi.object({
     fullName: Joi.string().required(),
     brideName: Joi.string().optional(),
     groomName: Joi.string(),
+    connectedUsers: Joi.array(),
     typeOfUser: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
