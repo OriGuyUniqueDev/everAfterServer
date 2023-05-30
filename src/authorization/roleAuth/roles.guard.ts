@@ -15,8 +15,7 @@ export class RolesGuard implements CanActivate {
     let hasRequiredRoles: boolean = false;
     requiredRoles.forEach((role) => {
       if (context.switchToHttp().getRequest().user.typeOfUser === role) {
-        console.log(context.switchToHttp().getRequest().user.email);
-        console.log(context.switchToHttp().getRequest().params.email);
+
         
         hasRequiredRoles = true;
         return true;

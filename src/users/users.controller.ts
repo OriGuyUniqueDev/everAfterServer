@@ -15,6 +15,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/authorization/roleAuth/roles.decorator';
 import { Role } from 'src/authorization/roleAuth/role.enum';
 import { RolesGuard } from 'src/authorization/roleAuth/roles.guard';
+import { CanEditUserInfoGuard } from 'src/authorization/canEditInfo/canEditUserInfo.guard';
 
 @Controller('users')
 export class UsersController {
@@ -30,8 +31,8 @@ export class UsersController {
   findAll() {
     return this.usersService.findAll();
   }
-  @UseGuards(JwtAuthGuard,RolesGuard)
-  @Roles(Role.Admin)
+  @Roles(Role.Admin,Role.Business,Role.Private)
+  @UseGuards(JwtAuthGuard,RolesGuard,CanEditUserInfoGuard)
   @Get(':email')
   findOne(@Param('email') email: string) {
     return this.usersService.findOne(email);
