@@ -13,16 +13,26 @@ export class RolesGuard implements CanActivate {
     ]);
 
     let hasRequiredRoles: boolean = false;
-    requiredRoles.forEach((role) => {
-      if (context.switchToHttp().getRequest().user.typeOfUser === role) {
-
-        
+    for(let i = 0; i <= requiredRoles.length; i++){
+      if (context.switchToHttp().getRequest().user.typeOfUser === requiredRoles[i]) {
         hasRequiredRoles = true;
-        return true;
+        break
       } else {
         hasRequiredRoles = false;
       }
-    });
+    }
     return hasRequiredRoles;
   }
 }
+    // requiredRoles.forEach((role) => {
+    //   if (context.switchToHttp().getRequest().user.typeOfUser === role) {
+
+        
+    //     hasRequiredRoles = true;
+    //     console.log('roles guard - continue');
+        
+    //     return true;
+    //   } else {
+    //     hasRequiredRoles = false;
+    //   }
+    // });

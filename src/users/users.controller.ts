@@ -32,7 +32,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
   @Roles(Role.Admin,Role.Business,Role.Private)
-  @UseGuards(JwtAuthGuard,RolesGuard,CanEditUserInfoGuard)
+  @UseGuards(JwtAuthGuard,CanEditUserInfoGuard,RolesGuard)
   @Get(':email')
   findOne(@Param('email') email: string) {
     return this.usersService.findOne(email);
