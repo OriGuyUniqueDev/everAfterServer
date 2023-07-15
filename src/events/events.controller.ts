@@ -17,25 +17,24 @@ import { Roles } from 'src/authorization/roleAuth/roles.decorator';
 import { CanEditUserInfoGuard } from 'src/authorization/canEditInfo/canEditUserInfo.guard';
 import { RolesGuard } from 'src/authorization/roleAuth/roles.guard';
 
-
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Roles(Role.Admin,Role.Business,Role.Private)
+  @Roles(Role.Admin, Role.Business, Role.Private)
   @Post()
   create(@Body() createEventDto: CreateEventDto) {
     return this.eventsService.create(createEventDto);
   }
-  @Roles(Role.Admin)
-  @UseGuards(JwtAuthGuard,CanEditUserInfoGuard,RolesGuard)
-  @Get()
-  findAll() {
-    return this.eventsService.findAll();
-  }
-  @Roles(Role.Admin,Role.Business,Role.Private)
-  @UseGuards(JwtAuthGuard,CanEditUserInfoGuard,RolesGuard)
+  // @Roles(Role.Admin)
+  // @UseGuards(JwtAuthGuard, CanEditUserInfoGuard, RolesGuard)
+  // @Get()
+  // findAll() {
+  //   return this.eventsService.findAll();
+  // }
+  @Roles(Role.Admin, Role.Business, Role.Private)
+  @UseGuards(JwtAuthGuard, CanEditUserInfoGuard, RolesGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(id);

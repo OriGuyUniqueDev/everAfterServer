@@ -1,6 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  NotFoundException,
+  NotImplementedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { User } from 'src/users/entities/user.entity';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
@@ -9,6 +15,7 @@ import { Event } from './entities/event.entity';
 export class EventsService {
   constructor(
     @InjectModel(Event.name) private readonly eventModel: Model<Event>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
   async create(createEventDto: CreateEventDto) {
     const newEvent = new this.eventModel(createEventDto);
@@ -19,9 +26,20 @@ export class EventsService {
     //add event
     try {
       const createdEvent = await newEvent.save();
+      const user = await this.userModel.findOneAndUpdate(
+        {
+          _id: createdEvent.eventUser,
+        },
+        {
+          eventData: createdEvent._id,
+          eventPannerName: createdEvent.eventPlanner,
+        },
+      );
       return createdEvent;
     } catch (error) {
-      throw new NotFoundException('Event not created');
+      throw new HttpException(error, 501, {
+        cause: new Error(error),
+      });
     }
   }
 

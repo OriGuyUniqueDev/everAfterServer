@@ -1,13 +1,16 @@
 import {
   ConflictException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserDocument } from './entities/user.entity';
+import { User } from './entities/user.entity';
 // import bcrypt from 'bcrypt';
 const bcrypt = require('bcrypt');
 
@@ -33,10 +36,9 @@ export class UsersService {
     // add new user
     try {
       const userToCreate = await newUser.save();
+
       return userToCreate;
     } catch (error) {
-      error;
-
       throw new NotFoundException('User not created');
     }
   }
@@ -47,7 +49,34 @@ export class UsersService {
     return allUsers;
   }
 
-  async findOne(email: string) {
+  async findOne(emailFromClient: string) {
+    const user: User = await this.userModel.findOne({ email: emailFromClient });
+    if (!user) throw new NotFoundException(`${emailFromClient} not found`);
+    const {
+      brideName,
+      businessAccount,
+      email,
+      eventData,
+      fullName,
+      groomName,
+      eventPannerName,
+      typeOfUser,
+      ...data
+    } = user;
+    const userToSend = {
+      brideName: brideName,
+      businessAccount: businessAccount,
+      email: email,
+      eventData: eventData,
+      fullName: fullName,
+      groomName: groomName,
+      eventPannerName: eventPannerName,
+      typeOfUser: typeOfUser,
+    };
+
+    return userToSend;
+  }
+  async findOneForLogin(email: string) {
     const user: User = await this.userModel.findOne({ email: email });
     if (!user) throw new NotFoundException(`${email} not found`);
     return user;

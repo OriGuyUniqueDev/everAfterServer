@@ -5,8 +5,8 @@ import { DevDatabaseModule } from './databases/dev-database.module';
 import { ProdDatabaseModule } from './databases/prod-database.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  const app = await NestFactory.create(AppModule, { cors: true });
+  // app.enableCors();
 
   await app.listen(3000);
 }

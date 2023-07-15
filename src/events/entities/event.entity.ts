@@ -7,8 +7,10 @@ export class Event {
   numOfGuest: number;
   @Prop({ required: true })
   eventUser: string;
-  @Prop({ required: true })
+  @Prop({ required: false })
   eventPlanner: string;
+  @Prop({ required: true })
+  hasEventPlanner: boolean;
   @Prop({ required: true })
   hasVenue: boolean;
   @Prop({ required: false })
@@ -22,8 +24,9 @@ export class Event {
   static readonly schema = Joi.object({
     numOfGuest: Joi.number().required(),
     eventUser: Joi.string().required(),
-    eventPlanner: Joi.string().required(),
+    eventPlanner: Joi.string().allow(''),
     hasVenue: Joi.boolean().required(),
+    hasEventPlanner: Joi.boolean(),
     venueName: Joi.string(),
     dateOfWedding: Joi.date(),
     budget: Joi.number(),

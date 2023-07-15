@@ -13,10 +13,17 @@ export class RolesGuard implements CanActivate {
     ]);
 
     let hasRequiredRoles: boolean = false;
-    for(let i = 0; i <= requiredRoles.length; i++){
-      if (context.switchToHttp().getRequest().user.typeOfUser === requiredRoles[i]) {
+    for (let i = 0; i <= requiredRoles.length; i++) {
+      console.log(
+        context.switchToHttp().getRequest().user.typeOfUser ===
+          requiredRoles[i],
+      );
+
+      if (
+        context.switchToHttp().getRequest().user.typeOfUser === requiredRoles[i]
+      ) {
         hasRequiredRoles = true;
-        break
+        break;
       } else {
         hasRequiredRoles = false;
       }
@@ -24,15 +31,14 @@ export class RolesGuard implements CanActivate {
     return hasRequiredRoles;
   }
 }
-    // requiredRoles.forEach((role) => {
-    //   if (context.switchToHttp().getRequest().user.typeOfUser === role) {
+// requiredRoles.forEach((role) => {
+//   if (context.switchToHttp().getRequest().user.typeOfUser === role) {
 
-        
-    //     hasRequiredRoles = true;
-    //     console.log('roles guard - continue');
-        
-    //     return true;
-    //   } else {
-    //     hasRequiredRoles = false;
-    //   }
-    // });
+//     hasRequiredRoles = true;
+//     console.log('roles guard - continue');
+
+//     return true;
+//   } else {
+//     hasRequiredRoles = false;
+//   }
+// });
