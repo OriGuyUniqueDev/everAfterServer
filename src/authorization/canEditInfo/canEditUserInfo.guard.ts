@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 export class CanEditUserInfoGuard implements CanActivate {
@@ -7,6 +7,7 @@ export class CanEditUserInfoGuard implements CanActivate {
     let user = context.switchToHttp().getRequest().user;
     let req = context.switchToHttp().getRequest();
     let paramEmail = req.params.email;
+    let paramEmail2 = req.user.email;
 
     switch (user.typeOfUser) {
       case 'business':
@@ -15,7 +16,7 @@ export class CanEditUserInfoGuard implements CanActivate {
         //     return true
         // }
         //edit his own details
-        if (user.email === paramEmail) {
+        if (user.email === paramEmail || user.email === paramEmail2) {
           return true;
         }
         //can edit user info
@@ -28,7 +29,7 @@ export class CanEditUserInfoGuard implements CanActivate {
         return false;
 
       case 'private':
-        if (user.email === paramEmail) {
+        if (user.email === paramEmail || user.email === paramEmail2) {
           return true;
         } else {
           return false;

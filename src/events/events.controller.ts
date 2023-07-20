@@ -40,6 +40,7 @@ export class EventsController {
     return this.eventsService.findOne(id);
   }
 
+  @Roles(Role.Admin, Role.Business, Role.Private)
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {

@@ -30,6 +30,7 @@ export class AuthService {
       id: user._id,
       typeOfUser: user.typeOfUser,
       connectedUsers: user.connectedUsers,
+      eventUser: user.eventData,
     };
 
     return {
