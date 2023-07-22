@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import * as Joi from 'joi';
 import BudgetDetails from 'src/interfaces/BudgetDetails';
 import ExpensesType from 'src/interfaces/ExpensesType';
+import GuestType from 'src/interfaces/GuestType';
 
 export class CreateEventDto {
   readonly numOfGuest: number;
@@ -14,6 +15,9 @@ export class CreateEventDto {
   readonly budget: number;
   readonly mealPrice: number;
   readonly presents: number;
+  readonly groomSide: number;
+  readonly brideSide: number;
+  readonly guestList: GuestType[];
   readonly expenses: ExpensesType;
   readonly tasks: string[];
   readonly totalBudget: number;
@@ -22,6 +26,8 @@ export class CreateEventDto {
   readonly alreadyPaid: number;
   static readonly schema = Joi.object({
     numOfGuest: Joi.number().required(),
+    groomSide: Joi.number().required(),
+    brideSide: Joi.number().required(),
     totalBudget: Joi.number().required(),
     totalSpent: Joi.number().required(),
     leftToSpend: Joi.number().required(),
@@ -36,6 +42,7 @@ export class CreateEventDto {
     dateOfWedding: Joi.date(),
     budget: Joi.number(),
     expenses: Joi.array().items(Joi.object()),
+    guestList: Joi.array().items(Joi.object()),
     budgetDetails: Joi.object(),
     tasks: Joi.array().items(Joi.string()),
   });

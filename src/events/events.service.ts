@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/users/entities/user.entity';
 import { CreateEventDto } from './dto/create-event.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
+// import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
 
 @Injectable()
@@ -56,10 +56,41 @@ export class EventsService {
     return event;
   }
 
-  async update(id: string, updateEventDto: UpdateEventDto) {
+  async update(id: string, updateEventDto: CreateEventDto) {
     const res = await this.eventModel.updateOne({ _id: id }, updateEventDto, {
       returnOriginal: false,
     });
+    if (res.matchedCount === 0) throw new NotFoundException('Event not found');
+    return 'Event Updated';
+  }
+  async updateExpanse(id: string, updateEventDto: CreateEventDto['expenses']) {
+    // const event = await this.eventModel.findOne({ _id: id });
+    // event.expenses.push(updateEventDto);
+    // await event.save();
+    const res = await this.eventModel.updateOne(
+      { _id: id },
+      { $push: { expenses: updateEventDto } },
+      {
+        returnOriginal: false,
+      },
+    );
+    if (res.matchedCount === 0) throw new NotFoundException('Event not found');
+    return 'Event Updated';
+  }
+  async updateGuestList(
+    id: string,
+    updateEventDto: CreateEventDto['guestList'],
+  ) {
+    // const event = await this.eventModel.findOne({ _id: id });
+    // event.expenses.push(updateEventDto);
+    // await event.save();
+    const res = await this.eventModel.updateOne(
+      { _id: id },
+      { $push: { expenses: updateEventDto } },
+      {
+        returnOriginal: false,
+      },
+    );
     if (res.matchedCount === 0) throw new NotFoundException('Event not found');
     return 'Event Updated';
   }

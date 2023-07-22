@@ -1,8 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as Joi from 'joi';
 import BudgetDetails from 'src/interfaces/BudgetDetails';
+import GuestType from 'src/interfaces/GuestType';
 
 export interface ExpensesType {
+  id: number;
   name: string;
   totalCost: number;
   deposit: number;
@@ -39,13 +41,21 @@ export class Event {
   @Prop({ required: false })
   totalBudget: number;
   @Prop({ required: false })
+  groomSide: number;
+  @Prop({ required: false })
+  brideSide: number;
+  @Prop({ required: false })
   expenses: ExpensesType[];
+  @Prop({ required: false })
+  guestList: GuestType[];
   @Prop({ required: false })
   tasks: string[];
   static readonly schema = Joi.object({
     numOfGuest: Joi.number().required(),
     presents: Joi.number().required(),
     alreadyPaid: Joi.number().required(),
+    groomSide: Joi.number().required(),
+    brideSide: Joi.number().required(),
     leftToSpend: Joi.number().required(),
     totalSpent: Joi.number().required(),
     totalBudget: Joi.number().required(),
@@ -58,6 +68,7 @@ export class Event {
     dateOfWedding: Joi.date(),
     budget: Joi.number(),
     tasks: Joi.array().items(Joi.string()),
+    guestList: Joi.array().items(Joi.string()),
     budgetDetails: Joi.object(),
   });
 }

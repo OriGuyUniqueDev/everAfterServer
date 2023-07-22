@@ -43,8 +43,26 @@ export class EventsController {
   @Roles(Role.Admin, Role.Business, Role.Private)
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
+  update(@Param('id') id: string, @Body() updateEventDto: CreateEventDto) {
     return this.eventsService.update(id, updateEventDto);
+  }
+  @Roles(Role.Admin, Role.Business, Role.Private)
+  @UseGuards(JwtAuthGuard)
+  @Patch('/updateExpanse/:id')
+  updateExpanse(
+    @Param('id') id: string,
+    @Body() updateEventDto: CreateEventDto['expenses'],
+  ) {
+    return this.eventsService.updateExpanse(id, updateEventDto);
+  }
+  @Roles(Role.Admin, Role.Business, Role.Private)
+  @UseGuards(JwtAuthGuard)
+  @Patch('/updateGuest/:id')
+  updateGuest(
+    @Param('id') id: string,
+    @Body() updateEventDto: CreateEventDto['guestList'],
+  ) {
+    return this.eventsService.updateGuestList(id, updateEventDto);
   }
 
   @UseGuards(JwtAuthGuard)
