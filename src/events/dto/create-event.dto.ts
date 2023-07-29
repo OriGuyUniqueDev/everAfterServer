@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import * as Joi from 'joi';
 import BudgetDetails from 'src/interfaces/BudgetDetails';
-import ExpensesType from 'src/interfaces/ExpensesType';
+import { ExpensesType } from 'src/interfaces/ExpensesType';
 import GuestType from 'src/interfaces/GuestType';
 
 export class CreateEventDto {
@@ -21,14 +21,20 @@ export class CreateEventDto {
   readonly expenses: ExpensesType;
   readonly tasks: string[];
   readonly totalBudget: number;
+  readonly totalGuestByList: number;
   readonly totalSpent: number;
   readonly leftToSpend: number;
   readonly alreadyPaid: number;
+  readonly todoLow: number;
+  readonly todoHigh: number;
+  readonly todoCompleted: number;
+  readonly totalTodoLeft: number;
   static readonly schema = Joi.object({
     numOfGuest: Joi.number().required(),
     groomSide: Joi.number().required(),
     brideSide: Joi.number().required(),
     totalBudget: Joi.number().required(),
+    totalGuestByList: Joi.number().required(),
     totalSpent: Joi.number().required(),
     leftToSpend: Joi.number().required(),
     alreadyPaid: Joi.number().required(),
@@ -45,6 +51,10 @@ export class CreateEventDto {
     guestList: Joi.array().items(Joi.object()),
     budgetDetails: Joi.object(),
     tasks: Joi.array().items(Joi.string()),
+    todoLow: Joi.number(),
+    todoHigh: Joi.number(),
+    todoCompleted: Joi.number(),
+    totalTodoLeft: Joi.number(),
   });
   static validate(data: CreateEventDto) {
     // validate the user data

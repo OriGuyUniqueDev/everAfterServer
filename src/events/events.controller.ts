@@ -64,6 +64,48 @@ export class EventsController {
   ) {
     return this.eventsService.updateGuestList(id, updateEventDto);
   }
+  @Roles(Role.Admin, Role.Business, Role.Private)
+  @UseGuards(JwtAuthGuard)
+  @Patch('/updateTask/:id')
+  updateTask(
+    @Param('id') id: string,
+    @Body() updateEventDto: CreateEventDto['tasks'],
+  ) {
+    return this.eventsService.updateTaskList(id, updateEventDto);
+  }
+  @Roles(Role.Admin, Role.Business, Role.Private)
+  @UseGuards(JwtAuthGuard)
+  @Patch('/deleteExpanse/:eventId/:expanseId')
+  deleteExpanse(
+    @Param('eventId') eventId: string,
+    @Param('expanseId') expanseId: string,
+    @Body() expanseInfo: { totalCost: number; deposit: number },
+    // @Body() updateEventDto: CreateEventDto['tasks'],
+  ) {
+    return this.eventsService.deleteExpanse(eventId, expanseId, expanseInfo);
+  }
+  @Roles(Role.Admin, Role.Business, Role.Private)
+  @UseGuards(JwtAuthGuard)
+  @Patch('/deleteGuest/:eventId/:guestId')
+  deleteGuest(
+    @Param('eventId') eventId: string,
+    @Param('guestId') guestId: string,
+    @Body() guestInfo: { amount: number; isBrideSide: boolean },
+    // @Body() updateEventDto: CreateEventDto['tasks'],
+  ) {
+    return this.eventsService.deleteGuest(eventId, guestId, guestInfo);
+  }
+  @Roles(Role.Admin, Role.Business, Role.Private)
+  @UseGuards(JwtAuthGuard)
+  @Patch('/deleteTask/:eventId/:taskId')
+  deleteTask(
+    @Param('eventId') eventId: string,
+    @Param('taskId') taskId: string,
+    @Body() taskInfo: { completed: boolean; priority: 'High' | 'Low' },
+    // @Body() updateEventDto: CreateEventDto['tasks'],
+  ) {
+    return this.eventsService.deleteTask(eventId, taskId, taskInfo);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
