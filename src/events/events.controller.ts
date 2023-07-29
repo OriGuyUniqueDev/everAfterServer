@@ -39,6 +39,13 @@ export class EventsController {
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(id);
   }
+  @Roles(Role.Admin, Role.Business, Role.Private)
+  @UseGuards(JwtAuthGuard, CanEditUserInfoGuard, RolesGuard)
+  @Get('/allBusinessEvent/:id')
+  async findAllBusinessUsersEvents(@Param('id') id: string) {
+    const data = await this.eventsService.findAllBusinessUsersEvents(id);
+    return data;
+  }
 
   @Roles(Role.Admin, Role.Business, Role.Private)
   @UseGuards(JwtAuthGuard)

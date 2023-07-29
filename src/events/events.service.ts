@@ -28,13 +28,23 @@ export class EventsService {
     //add event
     try {
       const createdEvent = await newEvent.save();
-      const user = await this.userModel.findOneAndUpdate(
+      const privateUser = await this.userModel.findOneAndUpdate(
+        {
+          email: createEventDto.connectedUser,
+        },
+        {
+          eventData: createdEvent._id,
+          eventPannerName: createdEvent.eventPlanner,
+        },
+      );
+      const businessUser = await this.userModel.findOneAndUpdate(
         {
           _id: createdEvent.eventUser,
         },
         {
           eventData: createdEvent._id,
           eventPannerName: createdEvent.eventPlanner,
+          $push: { connectedUsers: createEventDto.connectedUser },
         },
       );
       return createdEvent;
@@ -53,9 +63,37 @@ export class EventsService {
   }
 
   async findOne(id: string) {
-    const event = await this.eventModel.findOne({ _id: id });
+    let event;
+    if (id !== 'No Event Connected') {
+      event = await this.eventModel.findOne({
+        $or: [{ _id: id }, { email: id }],
+      });
+    }
     if (!event) throw new NotFoundException('event not found');
     return event;
+  }
+  async findAllBusinessUsersEvents(email: string) {
+    // let event;
+    let user = await this.userModel.findOne({
+      email: email,
+    });
+
+    const listOfUsers = await Promise.all(
+      user.connectedUsers.map(async (emailUser) => {
+        const user = await this.userModel.findOne({
+          email: emailUser,
+        });
+        console.log(user);
+
+        const objToAddToArray = {
+          groomName: user.groomName,
+          brideName: user.brideName,
+          eventData: user.eventData,
+        };
+        return objToAddToArray;
+      }),
+    );
+    return listOfUsers;
   }
 
   async update(id: string, updateEventDto: CreateEventDto) {
@@ -233,3 +271,10 @@ export class EventsService {
     return 'Event deleted successfully';
   }
 }
+
+// if (id !== 'No Event Connected') {
+//   event = await this.eventModel.findOne({
+//     $or: [{ _id: id }, { email: id }],
+//   });
+// }
+// if (!event) throw new NotFoundException('event not found');

@@ -29,6 +29,7 @@ export class CreateEventDto {
   readonly todoHigh: number;
   readonly todoCompleted: number;
   readonly totalTodoLeft: number;
+  readonly connectedUser: string;
   static readonly schema = Joi.object({
     numOfGuest: Joi.number().required(),
     groomSide: Joi.number().required(),
@@ -42,6 +43,7 @@ export class CreateEventDto {
     presents: Joi.number().required(),
     eventUser: Joi.string().required(),
     eventPlanner: Joi.string().allow(''),
+    connectedUser: Joi.string().allow(''),
     hasVenue: Joi.boolean().required(),
     hasEventPlanner: Joi.boolean(),
     venueName: Joi.string().allow(''),

@@ -29,7 +29,7 @@ export class AuthService {
       email: user.email,
       id: user._id,
       typeOfUser: user.typeOfUser,
-      connectedUsers: user.connectedUsers,
+      eventsIds: user.eventsIds,
       eventUser: user.eventData,
     };
 

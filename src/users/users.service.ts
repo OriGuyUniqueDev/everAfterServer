@@ -91,7 +91,10 @@ export class UsersService {
     const res = await this.userModel.updateOne(
       { email: email },
       updateUserDto,
-      { returnOriginal: false, returnDocument: 'after' },
+      {
+        returnOriginal: false,
+        returnDocument: 'after',
+      },
     );
     if (res.matchedCount === 0)
       throw new NotFoundException(`${email} not found`);
