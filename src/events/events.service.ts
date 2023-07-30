@@ -44,7 +44,7 @@ export class EventsService {
         {
           eventData: createdEvent._id,
           eventPannerName: createdEvent.eventPlanner,
-          $push: { connectedUsers: createEventDto.connectedUser },
+          $addToSet: { connectedUsers: createEventDto.connectedUser },
         },
       );
       return createdEvent;
@@ -83,7 +83,6 @@ export class EventsService {
         const user = await this.userModel.findOne({
           email: emailUser,
         });
-        console.log(user);
 
         const objToAddToArray = {
           groomName: user.groomName,

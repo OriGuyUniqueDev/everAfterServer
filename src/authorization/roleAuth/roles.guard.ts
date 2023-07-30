@@ -30,7 +30,6 @@ export class RolesGuard implements CanActivate {
 //   if (context.switchToHttp().getRequest().user.typeOfUser === role) {
 
 //     hasRequiredRoles = true;
-//     console.log('roles guard - continue');
 
 //     return true;
 //   } else {
