@@ -1,23 +1,62 @@
 import { BadRequestException } from '@nestjs/common';
 import * as Joi from 'joi';
+import BudgetDetails from 'src/interfaces/BudgetDetails';
+import { ExpensesType } from 'src/interfaces/ExpensesType';
+import GuestType from 'src/interfaces/GuestType';
+
 export class CreateEventDto {
   readonly numOfGuest: number;
   readonly eventUser: string;
   readonly eventPlanner: string;
+  readonly hasEventPlanner: boolean;
   readonly hasVenue: boolean;
   readonly venueName: string;
   readonly dateOfWedding: Date;
   readonly budget: number;
+  readonly mealPrice: number;
+  readonly presents: number;
+  readonly groomSide: number;
+  readonly brideSide: number;
+  readonly guestList: GuestType[];
+  readonly expenses: ExpensesType;
   readonly tasks: string[];
+  readonly totalBudget: number;
+  readonly totalGuestByList: number;
+  readonly totalSpent: number;
+  readonly leftToSpend: number;
+  readonly alreadyPaid: number;
+  readonly todoLow: number;
+  readonly todoHigh: number;
+  readonly todoCompleted: number;
+  readonly totalTodoLeft: number;
+  readonly connectedUser: string;
   static readonly schema = Joi.object({
     numOfGuest: Joi.number().required(),
+    groomSide: Joi.number().required(),
+    brideSide: Joi.number().required(),
+    totalBudget: Joi.number().required(),
+    totalGuestByList: Joi.number().required(),
+    totalSpent: Joi.number().required(),
+    leftToSpend: Joi.number().required(),
+    alreadyPaid: Joi.number().required(),
+    mealPrice: Joi.number().required(),
+    presents: Joi.number().required(),
     eventUser: Joi.string().required(),
-    eventPlanner: Joi.string().required(),
+    eventPlanner: Joi.string().allow(''),
+    connectedUser: Joi.string().allow(''),
     hasVenue: Joi.boolean().required(),
-    venueName: Joi.string(),
+    hasEventPlanner: Joi.boolean(),
+    venueName: Joi.string().allow(''),
     dateOfWedding: Joi.date(),
     budget: Joi.number(),
+    expenses: Joi.array().items(Joi.object()),
+    guestList: Joi.array().items(Joi.object()),
+    budgetDetails: Joi.object(),
     tasks: Joi.array().items(Joi.string()),
+    todoLow: Joi.number(),
+    todoHigh: Joi.number(),
+    todoCompleted: Joi.number(),
+    totalTodoLeft: Joi.number(),
   });
   static validate(data: CreateEventDto) {
     // validate the user data
@@ -25,6 +64,7 @@ export class CreateEventDto {
     if (error) {
       throw new BadRequestException(error.details[0].message);
     }
+
     return data;
   }
 }

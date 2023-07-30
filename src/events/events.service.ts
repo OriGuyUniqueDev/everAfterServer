@@ -1,14 +1,23 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  NotFoundException,
+  NotImplementedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Schema } from 'mongoose';
+import { BlobOptions } from 'buffer';
+import { Model } from 'mongoose';
+import { totalmem } from 'os';
+import { User } from 'src/users/entities/user.entity';
 import { CreateEventDto } from './dto/create-event.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
+// import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectModel(Event.name) private readonly eventModel: Model<Event>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
   async create(createEventDto: CreateEventDto) {
     const newEvent = new this.eventModel(createEventDto);
@@ -19,9 +28,30 @@ export class EventsService {
     //add event
     try {
       const createdEvent = await newEvent.save();
+      const privateUser = await this.userModel.findOneAndUpdate(
+        {
+          email: createEventDto.connectedUser,
+        },
+        {
+          eventData: createdEvent._id,
+          eventPannerName: createdEvent.eventPlanner,
+        },
+      );
+      const businessUser = await this.userModel.findOneAndUpdate(
+        {
+          _id: createdEvent.eventUser,
+        },
+        {
+          eventData: createdEvent._id,
+          eventPannerName: createdEvent.eventPlanner,
+          $addToSet: { connectedUsers: createEventDto.connectedUser },
+        },
+      );
       return createdEvent;
     } catch (error) {
-      throw new NotFoundException('Event not created');
+      throw new HttpException(error, 501, {
+        cause: new Error(error),
+      });
     }
   }
 
@@ -33,17 +63,204 @@ export class EventsService {
   }
 
   async findOne(id: string) {
-    const event = await this.eventModel.findOne({ _id: id });
+    let event;
+    if (id !== 'No Event Connected') {
+      event = await this.eventModel.findOne({
+        $or: [{ _id: id }, { email: id }],
+      });
+    }
     if (!event) throw new NotFoundException('event not found');
     return event;
   }
+  async findAllBusinessUsersEvents(email: string) {
+    // let event;
+    let user = await this.userModel.findOne({
+      email: email,
+    });
 
-  async update(id: string, updateEventDto: UpdateEventDto) {
+    const listOfUsers = await Promise.all(
+      user.connectedUsers.map(async (emailUser) => {
+        const user = await this.userModel.findOne({
+          email: emailUser,
+        });
+
+        const objToAddToArray = {
+          groomName: user.groomName,
+          brideName: user.brideName,
+          eventData: user.eventData,
+        };
+        return objToAddToArray;
+      }),
+    );
+    return listOfUsers;
+  }
+
+  async update(id: string, updateEventDto: CreateEventDto) {
     const res = await this.eventModel.updateOne({ _id: id }, updateEventDto, {
       returnOriginal: false,
     });
     if (res.matchedCount === 0) throw new NotFoundException('Event not found');
     return 'Event Updated';
+  }
+  async updateExpanse(id: string, updateEventDto: CreateEventDto['expenses']) {
+    // const event = await this.eventModel.findOne({ _id: id });
+    // event.expenses.push(updateEventDto);
+    // await event.save();
+    const res = await this.eventModel.updateOne(
+      { _id: id },
+      { $push: { expenses: updateEventDto } },
+      {
+        returnOriginal: false,
+      },
+    );
+    if (res.matchedCount === 0) throw new NotFoundException('Event not found');
+    return 'Event Updated';
+  }
+  async updateGuestList(
+    id: string,
+    updateEventDto: CreateEventDto['guestList'],
+  ) {
+    // const event = await this.eventModel.findOne({ _id: id });
+    // event.expenses.push(updateEventDto);
+    // await event.save();
+    const res = await this.eventModel.updateOne(
+      { _id: id },
+      { $push: { guestList: updateEventDto } },
+      {
+        returnOriginal: false,
+      },
+    );
+    if (res.matchedCount === 0) throw new NotFoundException('Event not found');
+    return 'Event Updated';
+  }
+  async updateTaskList(id: string, updateEventDto: CreateEventDto['tasks']) {
+    // const event = await this.eventModel.findOne({ _id: id });
+    // event.expenses.push(updateEventDto);
+    // await event.save();
+    const res = await this.eventModel.updateOne(
+      { _id: id },
+      { $push: { tasks: updateEventDto } },
+      {
+        returnOriginal: false,
+      },
+    );
+    if (res.matchedCount === 0) throw new NotFoundException('Event not found');
+    return 'Event Updated';
+  }
+  async deleteExpanse(
+    eventId: string,
+    expanseId: string,
+    expanseInfo: { totalCost: number; deposit: number },
+  ) {
+    const event = await this.eventModel.findOne({ _id: eventId });
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    const totalCost = expanseInfo.totalCost;
+    const deposit = expanseInfo.deposit;
+
+    const updatedLeftToSpend = event.leftToSpend + totalCost;
+    const updatedAlreadyPaid = event.alreadyPaid - deposit;
+    const updatedTotalSpent = event.totalSpent - totalCost;
+
+    const res = await this.eventModel.updateOne(
+      { _id: eventId },
+      {
+        $set: {
+          leftToSpend: updatedLeftToSpend,
+          alreadyPaid: updatedAlreadyPaid,
+          totalSpent: updatedTotalSpent,
+        },
+        $pull: { expenses: { id: Number(expanseId) } },
+      },
+      { returnOriginal: false },
+    );
+
+    if (res.matchedCount === 0) throw new NotFoundException('Event not found');
+    return 'Expense Deleted';
+  }
+  async deleteGuest(
+    eventId: string,
+    guestId: string,
+    guestInfo: { amount: number; isBrideSide: boolean },
+  ) {
+    const event = await this.eventModel.findOne({ _id: eventId });
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    const amount = guestInfo.amount;
+    const isBrideSide = guestInfo.isBrideSide;
+
+    const updatedTotalGuestByList = event.totalGuestByList - amount;
+    const updatedIsBrideSide = isBrideSide
+      ? event.brideSide - amount
+      : event.groomSide - amount;
+    const setFields: { [key: string]: any } = {
+      totalGuestByList: updatedTotalGuestByList,
+      // brideSide: updatedIsBrideSide,
+    };
+
+    // Conditionally add the field based on isBrideSide
+    setFields[isBrideSide ? 'brideSide' : 'groomSide'] = isBrideSide
+      ? event.brideSide - amount
+      : event.groomSide - amount;
+
+    const res = await this.eventModel.updateOne(
+      { _id: eventId },
+      {
+        $set: setFields,
+        $pull: { guestList: { id: Number(guestId) } },
+      },
+      { returnOriginal: false },
+    );
+
+    if (res.matchedCount === 0) throw new NotFoundException('Event not found');
+    return 'Guest Deleted';
+  }
+  async deleteTask(
+    eventId: string,
+    guestId: string,
+    taskInfo: { completed: boolean; priority: 'High' | 'Low' },
+  ) {
+    const event = await this.eventModel.findOne({ _id: eventId });
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    const completed = taskInfo.completed;
+    const priority = taskInfo.priority;
+
+    const updatedCompleted = completed
+      ? event.todoCompleted - 1
+      : event.todoCompleted;
+    // const updatedPriority =
+    //   priority === 'High' ? event.todoHigh - 1 : event.todoLow - 1;
+    const setFields: { [key: string]: any } = {
+      completed: updatedCompleted,
+      // brideSide: updatedIsBrideSide,
+      totalTodoLeft: event.totalTodoLeft - 1,
+    };
+
+    // Conditionally add the field based on isBrideSide
+    setFields[priority === 'High' ? 'todoHigh' : 'todoLow'] =
+      priority === 'High' ? event.todoHigh - 1 : event.todoLow - 1;
+
+    const res = await this.eventModel.updateOne(
+      { _id: eventId },
+      {
+        $set: setFields,
+        $pull: { tasks: { id: Number(guestId) } },
+      },
+      { returnOriginal: false },
+    );
+
+    if (res.matchedCount === 0) throw new NotFoundException('Event not found');
+    return 'Guest Deleted';
   }
 
   async remove(id: string) {
@@ -53,3 +270,10 @@ export class EventsService {
     return 'Event deleted successfully';
   }
 }
+
+// if (id !== 'No Event Connected') {
+//   event = await this.eventModel.findOne({
+//     $or: [{ _id: id }, { email: id }],
+//   });
+// }
+// if (!event) throw new NotFoundException('event not found');

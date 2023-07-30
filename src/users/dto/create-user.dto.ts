@@ -6,17 +6,39 @@ export class CreateUserDto {
   brideName: string;
   groomName: string;
   typeOfUser: 'admin' | 'private' | 'business';
-  eventData: Event[];
+  eventData: string;
+  businessAccount: boolean;
+  eventPannerName: string;
+  connectedUsers: string[];
   email: string;
   password: string;
   static schema = Joi.object({
-    fullName: Joi.string().required(),
-    brideName: Joi.string().required(),
-    groomName: Joi.string().required(),
+    fullName: Joi.when('businessAccount', {
+      is: false,
+      then: Joi.string().min(2),
+      otherwise: Joi.string().min(0),
+    }),
+    eventPannerName: Joi.when('businessAccount', {
+      is: true,
+      then: Joi.string().min(2),
+      otherwise: Joi.string().min(0),
+    }),
+    brideName: Joi.when('businessAccount', {
+      is: false,
+      then: Joi.string().min(2),
+      otherwise: Joi.string().min(0),
+    }),
+    groomName: Joi.when('businessAccount', {
+      is: false,
+      then: Joi.string().min(2),
+      otherwise: Joi.string().min(0),
+    }),
+    businessAccount: Joi.boolean().required(),
+    connectedUsers: Joi.array(),
     typeOfUser: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
-    eventData: Joi.array(),
+    eventData: Joi.string().allow(''),
   });
   static validate(data: CreateUserDto) {
     // validate the user data
