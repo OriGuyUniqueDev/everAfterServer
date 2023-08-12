@@ -9,6 +9,7 @@ import { BlobOptions } from 'buffer';
 import { Model } from 'mongoose';
 import { totalmem } from 'os';
 import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { CreateEventDto } from './dto/create-event.dto';
 // import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
@@ -18,6 +19,7 @@ export class EventsService {
   constructor(
     @InjectModel(Event.name) private readonly eventModel: Model<Event>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly usersService: UsersService,
   ) {}
   async create(createEventDto: CreateEventDto) {
     const newEvent = new this.eventModel(createEventDto);
@@ -37,6 +39,19 @@ export class EventsService {
           eventPannerName: createdEvent.eventPlanner,
         },
       );
+      if (!privateUser)
+        await this.usersService.create({
+          brideName: createEventDto.connectedUser,
+          businessAccount: false,
+          connectedUsers: [],
+          email: createEventDto.connectedUser,
+          eventData: createdEvent._id,
+          eventPannerName: createdEvent.eventPlanner,
+          fullName: 'Not',
+          groomName: 'Provided',
+          password: '123456',
+          typeOfUser: 'private',
+        });
       const businessUser = await this.userModel.findOneAndUpdate(
         {
           _id: createdEvent.eventUser,

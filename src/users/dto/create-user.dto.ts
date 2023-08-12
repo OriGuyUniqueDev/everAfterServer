@@ -1,12 +1,13 @@
 import { BadRequestException } from '@nestjs/common';
 import * as Joi from 'joi';
+import { ObjectId } from 'mongoose';
 
 export class CreateUserDto {
   fullName: string;
   brideName: string;
   groomName: string;
   typeOfUser: 'admin' | 'private' | 'business';
-  eventData: string;
+  eventData: any;
   businessAccount: boolean;
   eventPannerName: string;
   connectedUsers: string[];
@@ -38,7 +39,7 @@ export class CreateUserDto {
     typeOfUser: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
-    eventData: Joi.string().allow(''),
+    eventData: Joi.required(),
   });
   static validate(data: CreateUserDto) {
     // validate the user data
