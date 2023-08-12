@@ -1,73 +1,90 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# EverAfter❤️: A Wedding Management Web App
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 1. Introduction
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- **Purpose of the Project:** A web application designed to streamline the planning and management of weddings for wedding planners, brides, and grooms.
+- **Target Audience:** Wedding planners, brides, and grooms.
+- **Technologies Used:** React with TypeScript, NestJS, MUI.
+- **Overview of the Main Features:** User login/registration, adding/managing events. Businesses can manage multiple events while private users manage only one event.
 
-## Description
+## 2. Installation and Setup
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Frontend Installation:** Developed in React with TypeScript. You can clone the repository from [here](https://github.com/OriGuyUniqueDev/everAfterFrontMui.git).
+- **Backend Installation:** The backend is developed with NestJS. You can clone the repository from [here](https://github.com/OriGuyUniqueDev/everAfterServer.git).
+- **Live Site:** Access the live site [here](https://everafterfrontend.onrender.com).
 
-## Installation
+## 3. Usage Guide
 
-```bash
-$ npm install
-```
+- **Demo Private User:** Username: demo@gmail.com, Password: demo123.
+- **Demo Business User:** Username: demobus@gmail.com, Password: demo123.
 
-## Running the app
+## 4. Development Environment
 
-```bash
-# development
-$ npm run start
+- **Frontend Development:**
 
-# watch mode
-$ npm run start:dev
+  - **Language:** TypeScript
+  - **Framework:** React with Vite
+  - **UI Library:** MUI
+  - **Development Tools:** axios, formik, moment, React Router Dom, react-toastify, yup, eslint and Vite
 
-# production mode
-$ npm run start:prod
-```
+- **Backend Development:**
 
-## Test
+  - **Language:** TypeScript
+  - **Framework:** NestJS
+  - **Database:** MongoDB and for the live site MongoDB Atlas
+  - **API Design:**
 
-```bash
-# unit tests
-$ npm run test
+  ### User Endpoints
 
-# e2e tests
-$ npm run test:e2e
+- **Login:**
+- `POST /login` - Authenticates a user.
 
-# test coverage
-$ npm run test:cov
-```
+- **User Management:**
+  - `POST /registerMe` - Registers a new user.
+  - `GET /` - Retrieves all users (Admin and Business roles).
+  - `GET /:email` - Retrieves a specific user by email.
+  - `PATCH /:email` - Updates a specific user.
+  - `DELETE /:email` - Removes a specific user (Admin role only).
 
-## Support
+### Event Endpoints
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- **Event Management:**
+  - `GET /:id` - Retrieves a specific event by ID.
+  - `GET /allBusinessEvent/:id` - Retrieves all events for a business user.
+  - `PATCH /:id` - Updates a specific event.
+  - `PATCH /updateExpanse/:id` - Updates an event's expenses.
+  - `PATCH /updateGuest/:id` - Updates an event's guest list.
+  - `PATCH /updateTask/:id` - Updates an event's tasks.
+  - `PATCH /deleteExpanse/:eventId/:expanseId` - Deletes an expense from an event.
+  - `PATCH /deleteGuest/:eventId/:guestId` - Deletes a guest from an event.
+  - `PATCH /deleteTask/:eventId/:taskId` - Deletes a task from an event.
+  - `DELETE /:id` - Removes a specific event.
 
-## Stay in touch
+Note: Several endpoints require specific roles and authorization, as defined in the code.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- ## Authentication and Authorization
+  - **Role-Based Authorization:** Different roles (Admin, Business, Private) have access to different endpoints, providing a level of control and segmentation in the application.
+  - **Authentication:** Utilizes Passport for authentication, specifically using email as the primary identifier, ensuring secure login and access management.
+  - **User Authorization:** User roles are defined and managed to provide access control, ensuring that users only have access to the features and data relevant to their role.
 
-## License
+## Contribution Guidelines
 
-Nest is [MIT licensed](LICENSE).
+### Usage and Licensing
+
+This project is available for personal use and study purposes only. Commercial usage or modification for personal projects without approval is not permitted. If you would like to request permission for other uses, please contact me for approval and attribution requirements.
+
+### Contributing
+
+We welcome contributions to this project. If you're interested in contributing, you can:
+
+- **Clone the Project:** Feel free to clone the project repositories and explore the code. Make any changes or enhancements and submit a pull request for approval.
+  - [Frontend Repository](https://github.com/OriGuyUniqueDev/everAfterFrontMui.git)
+  - [Backend Repository](https://github.com/OriGuyUniqueDev/everAfterServer.git)
+- **Contact via Email:** If you have any questions, suggestions, or would like to discuss collaboration, you can reach out to me directly at [origuydev@gmail.com](mailto:origuydev@gmail.com).
+
+Please ensure that your contributions align with the usage and licensing terms outlined above. Your input and participation are valued, and I look forward to collaborating with you on this project!
+
+## 7. Contact Information
+
+- **Email:** origuydev@gmail.com
+- Open for work and collaboration.
