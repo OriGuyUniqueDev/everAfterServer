@@ -39,7 +39,18 @@ export class EventsService {
           eventPannerName: createdEvent.eventPlanner,
         },
       );
-      if (!privateUser || openNewUser)
+
+      const businessUser = await this.userModel.findOneAndUpdate(
+        {
+          _id: createdEvent.eventUser,
+        },
+        {
+          eventData: createdEvent._id,
+          eventPannerName: createdEvent.eventPlanner,
+          $addToSet: { connectedUsers: createEventDto.connectedUser },
+        },
+      );
+      if (!privateUser || businessUser)
         await this.usersService.create({
           brideName: '',
           businessAccount: false,
@@ -52,16 +63,6 @@ export class EventsService {
           password: '123456',
           typeOfUser: 'private',
         });
-      const businessUser = await this.userModel.findOneAndUpdate(
-        {
-          _id: createdEvent.eventUser,
-        },
-        {
-          eventData: createdEvent._id,
-          eventPannerName: createdEvent.eventPlanner,
-          $addToSet: { connectedUsers: createEventDto.connectedUser },
-        },
-      );
       return createdEvent;
     } catch (error) {
       throw new HttpException(error, 501, {
