@@ -40,15 +40,15 @@ export class EventsService {
         },
       );
       if (!privateUser)
-        this.usersService.create({
+        await this.usersService.create({
           brideName: createEventDto.connectedUser,
           businessAccount: false,
           connectedUsers: [],
           email: createEventDto.connectedUser,
           eventData: createdEvent._id,
           eventPannerName: createdEvent.eventPlanner,
-          fullName: createEventDto.connectedUser,
-          groomName: createEventDto.connectedUser,
+          fullName: 'Not',
+          groomName: 'Provided',
           password: '123456',
           typeOfUser: 'private',
         });

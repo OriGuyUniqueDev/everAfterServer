@@ -39,7 +39,7 @@ export class CreateUserDto {
     typeOfUser: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
-    eventData: Joi.string().allow(''),
+    eventData: Joi.required(),
   });
   static validate(data: CreateUserDto) {
     // validate the user data
