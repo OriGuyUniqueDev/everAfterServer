@@ -21,7 +21,7 @@ export class EventsService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly usersService: UsersService,
   ) {}
-  async create(createEventDto: CreateEventDto) {
+  async create(createEventDto: CreateEventDto, openNewUser) {
     const newEvent = new this.eventModel(createEventDto);
     // check the user input
     CreateEventDto.validate(createEventDto);
@@ -39,9 +39,9 @@ export class EventsService {
           eventPannerName: createdEvent.eventPlanner,
         },
       );
-      if (!privateUser)
+      if (!privateUser || openNewUser)
         await this.usersService.create({
-          brideName: createEventDto.connectedUser,
+          brideName: '',
           businessAccount: false,
           connectedUsers: [],
           email: createEventDto.connectedUser,
