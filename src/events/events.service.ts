@@ -21,7 +21,7 @@ export class EventsService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly usersService: UsersService,
   ) {}
-  async create(createEventDto: CreateEventDto, openNewUser) {
+  async create(createEventDto: CreateEventDto) {
     const newEvent = new this.eventModel(createEventDto);
     // check the user input
     CreateEventDto.validate(createEventDto);
