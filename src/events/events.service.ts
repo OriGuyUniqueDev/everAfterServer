@@ -50,19 +50,7 @@ export class EventsService {
           $addToSet: { connectedUsers: createEventDto.connectedUser },
         },
       );
-      if (!privateUser || businessUser)
-        await this.usersService.create({
-          brideName: '',
-          businessAccount: false,
-          connectedUsers: [],
-          email: createEventDto.connectedUser,
-          eventData: createdEvent._id,
-          eventPannerName: createdEvent.eventPlanner,
-          fullName: 'Not',
-          groomName: 'Provided',
-          password: '123456',
-          typeOfUser: 'private',
-        });
+
       return createdEvent;
     } catch (error) {
       throw new HttpException(error, 501, {
