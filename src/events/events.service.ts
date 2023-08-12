@@ -98,13 +98,14 @@ export class EventsService {
         const user = await this.userModel.findOne({
           email: emailUser,
         });
-
-        const objToAddToArray = {
-          groomName: user.groomName,
-          brideName: user.brideName,
-          eventData: user.eventData,
-        };
-        return objToAddToArray;
+        if (user) {
+          const objToAddToArray = {
+            groomName: user.groomName,
+            brideName: user.brideName,
+            eventData: user.eventData,
+          };
+          return objToAddToArray;
+        }
       }),
     );
     return listOfUsers;
