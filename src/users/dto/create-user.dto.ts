@@ -1,12 +1,13 @@
 import { BadRequestException } from '@nestjs/common';
 import * as Joi from 'joi';
+import { ObjectId } from 'mongoose';
 
 export class CreateUserDto {
   fullName: string;
   brideName: string;
   groomName: string;
   typeOfUser: 'admin' | 'private' | 'business';
-  eventData: string;
+  eventData: any;
   businessAccount: boolean;
   eventPannerName: string;
   connectedUsers: string[];
