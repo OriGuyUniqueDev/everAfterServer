@@ -6,7 +6,11 @@ import { ProdDatabaseModule } from './databases/prod-database.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    allowedHeaders: ['content-type'],
+    origin: 'https://ever-after.netlify.app/',
+    credentials: true,
+  });
 
   await app.listen(3000);
 }
