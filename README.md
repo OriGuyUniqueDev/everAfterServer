@@ -11,7 +11,7 @@
 
 - **Frontend Installation:** Developed in React with TypeScript. You can clone the repository from [here](https://github.com/OriGuyUniqueDev/everAfterFrontMui.git).
 - **Backend Installation:** The backend is developed with NestJS. You can clone the repository from [here](https://github.com/OriGuyUniqueDev/everAfterServer.git).
-- **Live Site:** Access the live site [here](https://ever-after.netlify.app).
+- **Live Site:** Access the live site [here](everafter.up.railway.app).
 
 ## 3. Usage Guide
 
