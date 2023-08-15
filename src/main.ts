@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppModule } from './app.module';
 import { DevDatabaseModule } from './databases/dev-database.module';
 import { ProdDatabaseModule } from './databases/prod-database.module';
-
+const port = process.env.PORT || 3000;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use((req, res, next) => {
@@ -21,6 +21,6 @@ async function bootstrap() {
     origin: '*',
   });
 
-  await app.listen(3000);
+  await app.listen(port);
 }
 bootstrap();
