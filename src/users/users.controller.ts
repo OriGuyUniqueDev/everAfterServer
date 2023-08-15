@@ -27,7 +27,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
   @Roles(Role.Admin, Role.Business)
-  @UseGuards(JwtAuthGuard, CanEditUserInfoGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();
