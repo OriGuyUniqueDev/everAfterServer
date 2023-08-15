@@ -29,6 +29,8 @@ export class EventsService {
 
     //add event
     try {
+      // update of create
+      await this.eventModel.deleteOne({ eventUser: createEventDto.eventUser });
       const createdEvent = await newEvent.save();
       const privateUser = await this.userModel.findOneAndUpdate(
         {
