@@ -61,6 +61,8 @@ export class Event {
   todoHigh: number;
   @Prop({ required: false })
   todoLow: number;
+  @Prop({ required: false })
+  connectedUser: string;
   static readonly schema = Joi.object({
     numOfGuest: Joi.number().required(),
     presents: Joi.number().required(),
@@ -86,6 +88,7 @@ export class Event {
     tasks: Joi.array().items(Joi.string()),
     guestList: Joi.array().items(Joi.string()),
     budgetDetails: Joi.object(),
+    connectedUser: Joi.string(),
   });
 }
 export const EventSchema = SchemaFactory.createForClass(Event);
