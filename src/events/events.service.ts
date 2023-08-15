@@ -26,33 +26,62 @@ export class EventsService {
     // check the user input
     CreateEventDto.validate(createEventDto);
     //check if the user exist in the database
-
+    const isEventToUpdate = await this.eventModel.findOne({
+      connectedUser: createEventDto.connectedUser,
+    });
     //add event
     try {
-      // update of create
-      const createdEvent = await newEvent.save();
-      const privateUser = await this.userModel.findOneAndUpdate(
-        {
-          email: createEventDto.connectedUser,
-        },
-        {
-          eventData: createdEvent._id,
-          eventPannerName: createdEvent.eventPlanner,
-        },
-      );
+      if (isEventToUpdate) {
+        let updated = await this.eventModel.findByIdAndUpdate(
+          { _id: isEventToUpdate._id },
+          createEventDto,
+          { new: true, returnDocument: 'after' },
+        );
+        await this.userModel.findOneAndUpdate(
+          {
+            email: createEventDto.connectedUser,
+          },
+          {
+            eventData: updated._id,
+            eventPannerName: updated.eventPlanner,
+          },
+          await this.userModel.findOneAndUpdate(
+            {
+              _id: updated.eventUser,
+            },
+            {
+              eventData: updated._id,
+              eventPannerName: updated.eventPlanner,
+              $addToSet: { connectedUsers: createEventDto.connectedUser },
+            },
+          );
+        );
+      } else {
+        // update of create
+        const createdEvent = await newEvent.save();
+        const privateUser = await this.userModel.findOneAndUpdate(
+          {
+            email: createEventDto.connectedUser,
+          },
+          {
+            eventData: createdEvent._id,
+            eventPannerName: createdEvent.eventPlanner,
+          },
+        );
 
-      const businessUser = await this.userModel.findOneAndUpdate(
-        {
-          _id: createdEvent.eventUser,
-        },
-        {
-          eventData: createdEvent._id,
-          eventPannerName: createdEvent.eventPlanner,
-          $addToSet: { connectedUsers: createEventDto.connectedUser },
-        },
-      );
+        const businessUser = await this.userModel.findOneAndUpdate(
+          {
+            _id: createdEvent.eventUser,
+          },
+          {
+            eventData: createdEvent._id,
+            eventPannerName: createdEvent.eventPlanner,
+            $addToSet: { connectedUsers: createEventDto.connectedUser },
+          },
+        );
 
-      return createdEvent;
+        return createdEvent;
+      }
     } catch (error) {
       throw new HttpException(error, 501, {
         cause: new Error(error),

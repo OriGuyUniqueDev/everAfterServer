@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as Joi from 'joi';
+import { ObjectId } from 'mongoose';
 import BudgetDetails from 'src/interfaces/BudgetDetails';
 import GuestType from 'src/interfaces/GuestType';
 import TodoType from 'src/interfaces/TaskTodo';
@@ -15,6 +16,8 @@ export interface ExpensesType {
 export class Event {
   @Prop({ required: true })
   numOfGuest: number;
+  // @Prop({ required: false })
+  // _id: ObjectId;
   @Prop({ required: true })
   presents: number;
   @Prop({ required: true })
