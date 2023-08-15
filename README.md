@@ -11,12 +11,12 @@
 
 - **Frontend Installation:** Developed in React with TypeScript. You can clone the repository from [here](https://github.com/OriGuyUniqueDev/everAfterFrontMui.git).
 - **Backend Installation:** The backend is developed with NestJS. You can clone the repository from [here](https://github.com/OriGuyUniqueDev/everAfterServer.git).
-- **Live Site:** Access the live site [here](https://everafterfrontend.onrender.com).
+- **Live Site:** Access the live site [here](https://ever-after.netlify.app).
 
 ## 3. Usage Guide
 
-- **Demo Private User:** Username: demo@gmail.com, Password: demo123.
-- **Demo Business User:** Username: demobus@gmail.com, Password: demo123.
+- **Demo Private User:** Username: test@gmail.com, Password: 12345678.
+- **Demo Business User:** Username: testbus@gmail.com, Password: 12345678
 
 ## 4. Development Environment
 
