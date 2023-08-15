@@ -46,6 +46,12 @@ export class UsersController {
   }
   @Roles(Role.Admin, Role.Business, Role.Private)
   @UseGuards(JwtAuthGuard, CanEditUserInfoGuard, RolesGuard)
+  @Get('/by/:id')
+  findOneId(@Param('id') id: string) {
+    return this.usersService.findOneById(id);
+  }
+  @Roles(Role.Admin, Role.Business, Role.Private)
+  @UseGuards(JwtAuthGuard, CanEditUserInfoGuard, RolesGuard)
   @Patch(':email')
   update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(email, updateUserDto);
