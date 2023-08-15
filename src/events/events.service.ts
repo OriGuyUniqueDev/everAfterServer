@@ -45,16 +45,16 @@ export class EventsService {
             eventData: updated._id,
             eventPannerName: updated.eventPlanner,
           },
-          await this.userModel.findOneAndUpdate(
-            {
-              _id: updated.eventUser,
-            },
-            {
-              eventData: updated._id,
-              eventPannerName: updated.eventPlanner,
-              $addToSet: { connectedUsers: createEventDto.connectedUser },
-            },
-          );
+        );
+        await this.userModel.findOneAndUpdate(
+          {
+            _id: updated.eventUser,
+          },
+          {
+            eventData: updated._id,
+            eventPannerName: updated.eventPlanner,
+            $addToSet: { connectedUsers: createEventDto.connectedUser },
+          },
         );
       } else {
         // update of create
